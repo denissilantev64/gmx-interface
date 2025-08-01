@@ -65,6 +65,7 @@ export function isSimulationPassed(errorData: ErrorData) {
  * @deprecated use simulateExecution instead
  */
 export async function simulateExecuteTxn(chainId: number, p: SimulateExecuteParams) {
+  return;
   const provider = getProvider(undefined, chainId);
 
   const multicallAddress = getContract(chainId, "Multicall");
