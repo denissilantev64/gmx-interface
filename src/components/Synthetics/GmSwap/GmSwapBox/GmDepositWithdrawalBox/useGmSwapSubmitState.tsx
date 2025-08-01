@@ -70,7 +70,7 @@ export const useGmSwapSubmitState = ({
   longTokenLiquidityUsd,
   shortTokenLiquidityUsd,
 
-  shouldDisableValidation,
+  _shouldDisableValidation,
 
   tokensData,
   marketTokensData,
@@ -85,6 +85,7 @@ export const useGmSwapSubmitState = ({
   const hasOutdatedUi = useHasOutdatedUi();
   const { openConnectModal } = useConnectModal();
   const { account, signer } = useWallet();
+  const disableValidation = true;
 
   const {
     glvTokenAmount = 0n,
@@ -110,7 +111,7 @@ export const useGmSwapSubmitState = ({
     marketTokenAmount,
     glvTokenAmount,
     glvTokenUsd,
-    shouldDisableValidation,
+    shouldDisableValidation: disableValidation,
     tokensData,
     executionFee,
     selectedMarketForGlv,
@@ -198,7 +199,7 @@ export const useGmSwapSubmitState = ({
     if (error) {
       return {
         text: error,
-        disabled: !shouldDisableValidation,
+        disabled: !disableValidation,
         onClick: onSubmit,
         errorDescription: swapErrorDescription,
       };
@@ -285,7 +286,7 @@ export const useGmSwapSubmitState = ({
     isDeposit,
     onSubmit,
     onConnectAccount,
-    shouldDisableValidation,
+    disableValidation,
     swapErrorDescription,
     chainId,
     tokensData,
