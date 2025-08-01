@@ -11,7 +11,8 @@ import { NATIVE_TOKEN_ADDRESS, convertTokenAddress } from "sdk/configs/tokens";
 
 import { validateSignerAddress } from "components/Errors/errorToasts";
 
-import { prepareOrderTxn } from "../orders/prepareOrderTxn";
+import { getGasPrice } from "lib/gas/gasPrice";
+import { getProvider } from "lib/rpc";
 import { TokensData } from "../tokens";
 import { applySlippageToMinOut } from "../trade";
 
@@ -104,17 +105,9 @@ export async function createDepositTxn(chainId: number, signer: Signer, p: Creat
     .filter(Boolean)
     .map((call) => contract.interface.encodeFunctionData(call!.method, call!.params));
 
-  const simulationPromise = undefined;
-
-  const { gasLimit, gasPriceData } = await prepareOrderTxn(
-    chainId,
-    contract,
-    "multicall",
-    [encodedPayload],
-    wntAmount,
-    simulationPromise,
-    p.metricId
-  );
+  const provider = getProvider(undefined, chainId);
+  const gasPriceData = await getGasPrice(provider, chainId);
+  const gasLimit = p.executionGasLimit;
 
   return callContract(chainId, contract, "multicall", [encodedPayload], {
     value: wntAmount,
