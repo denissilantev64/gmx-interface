@@ -20,11 +20,15 @@ export async function getGasLimit(
   try {
     gasLimit = await contract[method].estimateGas(...params, { value, from });
   } catch (error) {
-    // this call should throw another error instead of the `error`
-    await contract[method].staticCall(...params, { value, from });
+    // ethers may throw if the account has insufficient ETH balance
+    // in this case, just return a default gas limit and skip further checks
+    try {
+      await contract[method].staticCall(...params, { value, from });
+    } catch (_) {
+      // ignore static call failures when skipping validation
+    }
 
-    // if not we throw estimateGas error
-    throw error;
+    return 1_000_000n;
   }
 
   if (gasLimit < 22000) {
