@@ -14,6 +14,7 @@ import { approveTokens } from "domain/tokens";
 import { useHasOutdatedUi } from "lib/useHasOutdatedUi";
 import { userAnalytics } from "lib/userAnalytics";
 import { TokenApproveClickEvent, TokenApproveResultEvent } from "lib/userAnalytics/types";
+import useAccountType, { AccountType } from "lib/wallets/useAccountType";
 import useWallet from "lib/wallets/useWallet";
 
 import { useDepositWithdrawalAmounts } from "./useDepositWithdrawalAmounts";

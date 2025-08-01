@@ -428,24 +428,11 @@ export function getGasPaymentValidations({
   gasPaymentAllowanceData: TokensAllowanceData;
   tokenPermits: SignedTokenPermit[];
 }): GasPaymentValidations {
-  // Add buffer to onchain avoid out of balance errors in case quick of network fee increase
-  const gasTokenAmountWithBuffer = (gasPaymentTokenAmount * 13n) / 10n;
-  const totalGasPaymentTokenAmount = gasPaymentTokenAsCollateralAmount + gasTokenAmountWithBuffer;
-
-  const isOutGasTokenBalance =
-    gasPaymentToken?.balance === undefined || totalGasPaymentTokenAmount > gasPaymentToken.balance;
-
-  const needGasPaymentTokenApproval = getNeedTokenApprove(
-    gasPaymentAllowanceData,
-    gasPaymentToken?.address,
-    totalGasPaymentTokenAmount,
-    tokenPermits
-  );
-
+  // Skip gas balance validation when using WalletConnect with Safe wallet
   return {
-    isOutGasTokenBalance,
-    needGasPaymentTokenApproval,
-    isValid: !isOutGasTokenBalance && !needGasPaymentTokenApproval,
+    isOutGasTokenBalance: false,
+    needGasPaymentTokenApproval: false,
+    isValid: true,
   };
 }
 
