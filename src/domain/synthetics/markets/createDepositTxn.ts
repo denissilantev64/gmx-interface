@@ -1,4 +1,3 @@
-import { t } from "@lingui/macro";
 import { Signer, ethers } from "ethers";
 
 import { getContract } from "config/contracts";
@@ -13,7 +12,6 @@ import { NATIVE_TOKEN_ADDRESS, convertTokenAddress } from "sdk/configs/tokens";
 import { validateSignerAddress } from "components/Errors/errorToasts";
 
 import { prepareOrderTxn } from "../orders/prepareOrderTxn";
-import { simulateExecuteTxn } from "../orders/simulateExecuteTxn";
 import { TokensData } from "../tokens";
 import { applySlippageToMinOut } from "../trade";
 
@@ -106,19 +104,7 @@ export async function createDepositTxn(chainId: number, signer: Signer, p: Creat
     .filter(Boolean)
     .map((call) => contract.interface.encodeFunctionData(call!.method, call!.params));
 
-  const simulationPromise = !p.skipSimulation
-    ? simulateExecuteTxn(chainId, {
-        account: p.account,
-        primaryPriceOverrides: {},
-        tokensData: p.tokensData,
-        createMulticallPayload: encodedPayload,
-        method: "simulateExecuteLatestDeposit",
-        errorTitle: t`Deposit error.`,
-        value: wntAmount,
-        metricId: p.metricId,
-        blockTimestampData: p.blockTimestampData,
-      })
-    : undefined;
+  const simulationPromise = undefined;
 
   const { gasLimit, gasPriceData } = await prepareOrderTxn(
     chainId,
