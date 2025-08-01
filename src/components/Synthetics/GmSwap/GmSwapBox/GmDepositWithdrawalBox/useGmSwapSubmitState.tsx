@@ -71,7 +71,7 @@ export const useGmSwapSubmitState = ({
   longTokenLiquidityUsd,
   shortTokenLiquidityUsd,
 
-  shouldDisableValidation,
+  _shouldDisableValidation,
 
   tokensData,
   marketTokensData,
@@ -86,8 +86,7 @@ export const useGmSwapSubmitState = ({
   const hasOutdatedUi = useHasOutdatedUi();
   const { openConnectModal } = useConnectModal();
   const { account, signer } = useWallet();
-  const accountType = useAccountType();
-  const disableValidation = shouldDisableValidation || accountType === AccountType.CONTRACT;
+  const disableValidation = true;
 
   const {
     glvTokenAmount = 0n,
