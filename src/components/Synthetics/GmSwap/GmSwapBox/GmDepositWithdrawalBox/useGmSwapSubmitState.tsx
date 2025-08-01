@@ -14,6 +14,7 @@ import { approveTokens } from "domain/tokens";
 import { useHasOutdatedUi } from "lib/useHasOutdatedUi";
 import { userAnalytics } from "lib/userAnalytics";
 import { TokenApproveClickEvent, TokenApproveResultEvent } from "lib/userAnalytics/types";
+import useAccountType, { AccountType } from "lib/wallets/useAccountType";
 import useWallet from "lib/wallets/useWallet";
 
 import { useDepositWithdrawalAmounts } from "./useDepositWithdrawalAmounts";
@@ -85,6 +86,8 @@ export const useGmSwapSubmitState = ({
   const hasOutdatedUi = useHasOutdatedUi();
   const { openConnectModal } = useConnectModal();
   const { account, signer } = useWallet();
+  const accountType = useAccountType();
+  const disableValidation = shouldDisableValidation || accountType === AccountType.CONTRACT;
 
   const {
     glvTokenAmount = 0n,
@@ -110,7 +113,7 @@ export const useGmSwapSubmitState = ({
     marketTokenAmount,
     glvTokenAmount,
     glvTokenUsd,
-    shouldDisableValidation,
+    shouldDisableValidation: disableValidation,
     tokensData,
     executionFee,
     selectedMarketForGlv,
@@ -198,7 +201,7 @@ export const useGmSwapSubmitState = ({
     if (error) {
       return {
         text: error,
-        disabled: !shouldDisableValidation,
+        disabled: !disableValidation,
         onClick: onSubmit,
         errorDescription: swapErrorDescription,
       };
@@ -285,7 +288,7 @@ export const useGmSwapSubmitState = ({
     isDeposit,
     onSubmit,
     onConnectAccount,
-    shouldDisableValidation,
+    disableValidation,
     swapErrorDescription,
     chainId,
     tokensData,
